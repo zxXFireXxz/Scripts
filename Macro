@@ -1,0 +1,14 @@
+-- Loadout: Cowboy,Minigunner,DJ Booth,Commander,Ranger
+-- Map: Crossroads
+-- Modes: Frost
+
+--
+UnlockTimeScale(0)
+CycleTimeScale(0)
+CycleTimeScale(0)
+--
+VoteSkipWave(0, 0)
+AutoSkipVote()
+StopAutoSkipVoteWave(28)
+--
+PlaceTower("Cowboy", 15.759, 1.000, 10.782)
