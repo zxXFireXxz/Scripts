@@ -1,0 +1,16 @@
+getgenv().ReturnHub = {
+    autoskip = true,
+    SellAllTower = false,
+    AtWave = 50,                                     
+    Modifiers = {"Glass", "SpeedyEnemies", "HealthyEnemies"},
+    AutoAbilities = false,
+    AutoRewards = true, 
+    SnowcharmsPickup = false,
+    macroURL = "https://raw.githubusercontent.com/zxXFireXxz/ScriptsChambers/refs/heads/main/AutoFarmHardcore", 
+    replay = true,                                
+    Gamemode = "Hardcore",
+    Map = "Crossroads",
+    Difficulty = "Hardcore",
+    Loadout = {"Milliant", "Trapper", "", "", ""},
+}
+loadstring(game:HttpGet("https://raw.githubusercontent.com/2xrW/returnhub-output/refs/heads/main/TDS"))()
