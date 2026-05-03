@@ -1,0 +1,132 @@
+local plr = game:GetService("Players").LocalPlayer
+local char = plr.Character
+local RunService = game:GetService("RunService")
+local hrp = char.HumanoidRootPart
+local Library = loadstring(game:HttpGet( "https://raw.githubusercontent.com/tlredz/Library/refs/heads/main/redz-V5-remake/main.luau" ))()
+
+--{Values}
+local ChoosedSave = "Autosave"
+local AutosaveEvent = game:GetService("ReplicatedStorage").ClientServerRemotes.LoadBuild
+local AutoLoad = false
+local AutoLoadconnection = nil
+local Start = false
+local MultiDifficulty = true
+local WaveNumber = 1
+local ChoosedWave
+local ChoosedDifficulty = "Easy"
+local AutoWave = false
+local AutoWaveEvent = game:GetService("ReplicatedStorage").ClientServerRemotes.StartWave
+local Autowaveconnection = nil
+
+-- Control variables for rate limiting
+local waveCooldown = false
+local loadCooldown = false
+local collectLoopRunning = false
+
+--{Menu}
+
+local Window = Library:MakeWindow({ Title = "BlueX2 : SoldierZ", SubTitle = "dev by zxXFireXxz", ScriptFolder = "BlueX2-soldierZ" })
+
+local Minimizer = Window:NewMinimizer({ KeyCode = Enum.KeyCode.LeftControl })
+
+local MobileButton = Minimizer:CreateMobileMinimizer({ Image = "rbxassetid://123239746308801", BackgroundColor3 = Color3.fromRGB(0, 0, 0) })
+
+local MainTab = Window:MakeTab({ Title = "Cool Tab", Icon = "Dice" })
+
+MainTab:AddTextBox({ Name = "Choose Wave", Placeholder = "1-40", ClearOnFocus = true, Callback = function(Value)
+    WaveNumber = tonumber(Value) or 1
+end
+})
+
+MainTab:AddDropdown({ Name = "Choose Difficulty", Options = {"Easy", "Medium", "Hard", "ToyBreaker"}, Default = "Easy", Callback = function(Value)
+    ChoosedDifficulty = Value
+end
+})
+
+MainTab:AddToggle({ Name = "Start auto wave", Default = false, Callback = function(State)
+    AutoWave = State
+    
+    if AutoWave == true then
+        if not Autowaveconnection then
+            Autowaveconnection = RunService.Heartbeat:Connect(function()
+                if AutoWave and WaveNumber and ChoosedDifficulty then
+                    if not waveCooldown then
+                        waveCooldown = true
+                        AutoWaveEvent:FireServer(WaveNumber, ChoosedDifficulty, Start)
+                        task.wait(2) -- 2 second delay between waves
+                        waveCooldown = false
+                    end
+                end
+            end)
+        end
+    else
+        if Autowaveconnection then
+            Autowaveconnection:Disconnect()
+            Autowaveconnection = nil
+            waveCooldown = false
+        end
+    end
+end
+})
+
+MainTab:AddButton({ Name = "Collect Teddy Bears From all plots", Debounce = 0.5, Callback = function()
+    if collectLoopRunning then
+        return
+    end
+    
+    collectLoopRunning = true
+    
+    task.spawn(function()
+        while collectLoopRunning do
+            if hrp and hrp.Parent then
+                local plots = {"Red", "Blue", "Green", "Yellow"}
+                
+                for _, plotColor in ipairs(plots) do
+                    local plot = workspace.Plots and workspace.Plots[plotColor]
+                    if plot and plot.Collectibles then
+                        for i, v in ipairs(plot.Collectibles:GetDescendants()) do
+                            if v and v.ClassName == "TouchTransmitter" and v.Parent then
+                                pcall(function()
+                                    firetouchinterest(v.Parent, hrp, 0)
+                                end)
+                            end
+                        end
+                    end
+                end
+            end
+            task.wait(2) -- 2 second delay between collection cycles
+        end
+    end)
+end
+})
+
+MainTab:AddButton({ Name = "Stop Collecting Teddy Bears", Debounce = 0.5, Callback = function()
+    collectLoopRunning = false
+end
+})
+
+MainTab:AddToggle({ Name = "Auto Load", Default = false, Callback = function(State2)
+    AutoLoad = State2
+    
+    if AutoLoad == true then
+        if not AutoLoadconnection then
+            AutoLoadconnection = RunService.Heartbeat:Connect(function()
+                if AutoLoad then
+                    if not loadCooldown then
+                        loadCooldown = true
+                        AutosaveEvent:FireServer(ChoosedSave)
+                        task.wait(2) -- 2 second delay between loads
+                        loadCooldown = false
+                    end
+                end
+            end)
+        end
+    else
+        if AutoLoadconnection then
+            AutoLoadconnection:Disconnect()
+            AutoLoadconnection = nil
+            loadCooldown = false
+        end
+    end
+end
+})
