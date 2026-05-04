@@ -96,8 +96,7 @@ MainTab:AddButton({ Name = "Auto collect teddy bears", Debounce = 0.5, Callback 
             firetouchinterest(v.Parent, hrp, 0)
         end
     end
-    end
-    end
+end
 })
 
 MainTab:AddToggle({ Name = "Auto Load", Default = false, Callback = function(State2)
