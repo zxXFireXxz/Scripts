@@ -69,40 +69,35 @@ MainTab:AddToggle({ Name = "Start auto wave", Default = false, Callback = functi
 end
 })
 
-MainTab:AddButton({ Name = "Collect Teddy Bears From all plots", Debounce = 0.5, Callback = function()
-    if collectLoopRunning then
-        return
-    end
-    
-    collectLoopRunning = true
-    
-    task.spawn(function()
-        while collectLoopRunning do
-            if hrp and hrp.Parent then
-                local plots = {"Red", "Blue", "Green", "Yellow"}
-                
-                for _, plotColor in ipairs(plots) do
-                    local plot = workspace.Plots and workspace.Plots[plotColor]
-                    if plot and plot.Collectibles then
-                        for i, v in ipairs(plot.Collectibles:GetDescendants()) do
-                            if v and v.ClassName == "TouchTransmitter" and v.Parent then
-                                pcall(function()
-                                    firetouchinterest(v.Parent, hrp, 0)
-                                end)
-                            end
-                        end
-                    end
-                end
-            end
-            task.wait(2) -- 2 second delay between collection cycles
+MainTab:AddButton({ Name = "Auto collect teddy bears", Debounce = 0.5, Callback = function()
+    while true do
+    task.wait(1)
+    for i, v in ipairs(workspace.Plots.Red.Collectibles:GetDescendants()) do
+        if v.ClassName == "TouchTransmitter" then
+            firetouchinterest(v.Parent, hrp, 0)
         end
-    end)
-end
-})
+    end
 
-MainTab:AddButton({ Name = "Stop Collecting Teddy Bears", Debounce = 0.5, Callback = function()
-    collectLoopRunning = false
-end
+    for i, v in ipairs(workspace.Plots.Blue.Collectibles:GetDescendants()) do
+        if v.ClassName == "TouchTransmitter" then
+            firetouchinterest(v.Parent, hrp, 0)
+        end
+    end
+
+    for i, v in ipairs(workspace.Plots.Green.Collectibles:GetDescendants()) do
+        if v.ClassName == "TouchTransmitter" then
+            firetouchinterest(v.Parent, hrp, 0)
+        end
+    end
+
+
+    for i, v in ipairs(workspace.Plots.Yellow.Collectibles:GetDescendants()) do
+        if v.ClassName == "TouchTransmitter" then
+            firetouchinterest(v.Parent, hrp, 0)
+        end
+    end
+    end
+    end
 })
 
 MainTab:AddToggle({ Name = "Auto Load", Default = false, Callback = function(State2)
@@ -115,7 +110,7 @@ MainTab:AddToggle({ Name = "Auto Load", Default = false, Callback = function(Sta
                     if not loadCooldown then
                         loadCooldown = true
                         AutosaveEvent:FireServer(ChoosedSave)
-                        task.wait(2) -- 2 second delay between loads
+                        task.wait(2) -- 3 second delay between loads
                         loadCooldown = false
                     end
                 end
