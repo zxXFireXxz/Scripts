@@ -13,7 +13,7 @@ local fruitanims = {
     Flame = "rbxassetid://121545956771325",
     Ice = "", --exception
     Sand = "rbxassetid://15123673019",
-    Dark = "", 
+    Dark = "rbxassetid://15123618591", 
     Eagle = "rbxassetid://77885466312115",
     Diamond = "", --exception
     Light = "rbxassetid://15123640714",
@@ -36,13 +36,15 @@ local fruitanims = {
     TRex = "rbxassetid://15694681122",
     Dough = "rbxassetid://15123624401",
     Shadow = "rbxassetid://15123675904",
+    Venom = "rbxassetid://10773719142",
     Gas = "rbxassetid://118054805452821",
     Spirit = "",
     Tiger = "rbxassetid://70394923210713",
     Yeti = "",
     Kitsune = "",
     Control = "",
-    Dragon = ""
+    DragonEast = "",
+    DragonWest = "",
 }
 
 local animToFruit = {}
