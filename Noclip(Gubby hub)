@@ -1,0 +1,174 @@
+local ScreenGui = Instance.new("ScreenGui")
+local MainFrame = Instance.new("Frame")
+local UIStroke = Instance.new("UIStroke")
+local UICorner = Instance.new("UICorner")
+local Title = Instance.new("TextLabel")
+local ToggleButton = Instance.new("TextButton")
+local ButtonCorner = Instance.new("UICorner")
+local ButtonStroke = Instance.new("UIStroke")
+local CloseButton = Instance.new("TextButton")
+local MinimizeButton = Instance.new("TextButton")
+
+ScreenGui.Parent = game:GetService("CoreGui")
+ScreenGui.ResetOnSpawn = false
+
+MainFrame.Name = "GubbyHubMain"
+MainFrame.Parent = ScreenGui
+MainFrame.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
+MainFrame.Position = UDim2.new(0.05, 0, 0.3, 0)
+MainFrame.Size = UDim2.new(0, 160, 0, 110)
+MainFrame.Active = true
+MainFrame.Draggable = true
+
+UICorner.CornerRadius = UDim.new(0, 8)
+UICorner.Parent = MainFrame
+
+UIStroke.Parent = MainFrame
+UIStroke.Color = Color3.fromRGB(0, 170, 255)
+UIStroke.Thickness = 2
+UIStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+
+Title.Name = "Title"
+Title.Parent = MainFrame
+Title.BackgroundTransparency = 1
+Title.Position = UDim2.new(0, 10, 0, 5)
+Title.Size = UDim2.new(1, -60, 0, 25)
+Title.Font = Enum.Font.GothamBold
+Title.Text = "gubby hub"
+Title.TextColor3 = Color3.fromRGB(0, 170, 255)
+Title.TextSize = 16.0
+Title.TextXAlignment = Enum.TextXAlignment.Left
+
+CloseButton.Name = "CloseButton"
+CloseButton.Parent = MainFrame
+CloseButton.BackgroundTransparency = 1
+CloseButton.Position = UDim2.new(1, -22, 0, 5)
+CloseButton.Size = UDim2.new(0, 18, 0, 25)
+CloseButton.Font = Enum.Font.GothamBold
+CloseButton.Text = "×"
+CloseButton.TextColor3 = Color3.fromRGB(150, 150, 150)
+CloseButton.TextSize = 20.0
+
+MinimizeButton.Name = "MinimizeButton"
+MinimizeButton.Parent = MainFrame
+MinimizeButton.BackgroundTransparency = 1
+MinimizeButton.Position = UDim2.new(1, -44, 0, 5)
+MinimizeButton.Size = UDim2.new(0, 18, 0, 25)
+MinimizeButton.Font = Enum.Font.GothamBold
+MinimizeButton.Text = "−"
+MinimizeButton.TextColor3 = Color3.fromRGB(150, 150, 150)
+MinimizeButton.TextSize = 18.0
+
+ToggleButton.Name = "NoclipButton"
+ToggleButton.Parent = MainFrame
+ToggleButton.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+ToggleButton.Position = UDim2.new(0.1, 0, 0.4, 5)
+ToggleButton.Size = UDim2.new(0.8, 0, 0, 40)
+ToggleButton.Font = Enum.Font.GothamSemibold
+ToggleButton.Text = "Noclip: OFF"
+ToggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+ToggleButton.TextSize = 14.0
+
+ButtonCorner.CornerRadius = UDim.new(0, 6)
+ButtonCorner.Parent = ToggleButton
+
+ButtonStroke.Parent = ToggleButton
+ButtonStroke.Color = Color3.fromRGB(50, 50, 50)
+ButtonStroke.Thickness = 1
+
+local OrbButton = Instance.new("TextButton")
+local OrbCorner = Instance.new("UICorner")
+local OrbStroke = Instance.new("UIStroke")
+
+OrbButton.Name = "GubbyHubOrb"
+OrbButton.Parent = ScreenGui
+OrbButton.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
+OrbButton.Position = UDim2.new(0.02, 0, 0.2, 0)
+OrbButton.Size = UDim2.new(0, 45, 0, 45)
+OrbButton.Font = Enum.Font.GothamBold
+OrbButton.Text = "G"
+OrbButton.TextColor3 = Color3.fromRGB(0, 170, 255)
+OrbButton.TextSize = 18.0
+OrbButton.Visible = false
+OrbButton.Active = true
+OrbButton.Draggable = true
+
+OrbCorner.CornerRadius = UDim.new(1, 0)
+OrbCorner.Parent = OrbButton
+
+OrbStroke.Parent = OrbButton
+OrbStroke.Color = Color3.fromRGB(0, 170, 255)
+OrbStroke.Thickness = 2
+
+local noclip = false
+local player = game:GetService("Players").LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local TweenService = game:GetService("TweenService")
+
+player.CharacterAdded:Connect(function(char)
+    character = char
+end)
+
+local function resetCollision()
+    if character then
+        for _, part in pairs(character:GetDescendants()) do
+            if part:IsA("BasePart") then
+                if part.Name == "UpperTorso" or part.Name == "LowerTorso" or part.Name == "HumanoidRootPart" or part.Name == "Head" or string.find(part.Name, "Arm") or part.Name == "Torso" then
+
+                part.CanCollide = true
+                end
+            end
+        end
+    end
+end
+
+CloseButton.MouseButton1Click:Connect(function()
+    noclip = false
+    resetCollision()
+    ScreenGui:Destroy()
+end)
+
+MinimizeButton.MouseButton1Click:Connect(function()
+    MainFrame.Visible = false
+    OrbButton.Visible = true
+    OrbButton.Size = UDim2.new(0, 0, 0, 0)
+    TweenService:Create(OrbButton, TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Size = UDim2.new(0, 45, 0, 45)}):Play()
+end)
+
+OrbButton.MouseButton1Click:Connect(function()
+    OrbButton.Visible = false
+    MainFrame.Visible = true
+end)
+
+CloseButton.MouseEnter:Connect(function() CloseButton.TextColor3 = Color3.fromRGB(255, 70, 70) end)
+CloseButton.MouseLeave:Connect(function() CloseButton.TextColor3 = Color3.fromRGB(150, 150, 150) end)
+
+MinimizeButton.MouseEnter:Connect(function() MinimizeButton.TextColor3 = Color3.fromRGB(0, 170, 255) end)
+MinimizeButton.MouseLeave:Connect(function() MinimizeButton.TextColor3 = Color3.fromRGB(150, 150, 150) end)
+
+OrbButton.MouseEnter:Connect(function() TweenService:Create(OrbStroke, TweenInfo.new(0.2), {Color = Color3.fromRGB(255, 255, 255)}):Play() end)
+OrbButton.MouseLeave:Connect(function() TweenService:Create(OrbStroke, TweenInfo.new(0.2), {Color = Color3.fromRGB(0, 170, 255)}):Play() end)
+
+ToggleButton.MouseButton1Click:Connect(function()
+    noclip = not noclip
+    if noclip then
+        ToggleButton.Text = "Noclip: ON"
+        ToggleButton.TextColor3 = Color3.fromRGB(0, 255, 120)
+        ButtonStroke.Color = Color3.fromRGB(0, 255, 120)
+    else
+        ToggleButton.Text = "Noclip: OFF"
+        ToggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+        ButtonStroke.Color = Color3.fromRGB(50, 50, 50)
+        resetCollision()
+    end
+end)
+
+game:GetService("RunService").Stepped:Connect(function()
+    if noclip and character then
+        for _, part in pairs(character:GetDescendants()) do
+            if part:IsA("BasePart") then
+                part.CanCollide = false
+            end
+        end
+    end
+end)
